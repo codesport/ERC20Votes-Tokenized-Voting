@@ -17,7 +17,6 @@ interface VotingToken {
 //  Map Length: Use a separate array tp staore info on map size.  Use mappings for random access when you know the keys
 
 contract TokenizedBallot {
-
     struct Proposal {
         bytes32 name;
         uint voteCount;
@@ -40,9 +39,9 @@ contract TokenizedBallot {
         /**
          * Client Requirement: Tokens must be held prior to ballot deployment
          *
-         * @dev Bro, I'm not going to force the client to know Block number before deploying! 
+         * @dev Bro, I'm not going to force the client to know Block number before deploying!
          * Therefore softcoding it in as "targetBlockNumber = (block.number - 1)"
-         * 
+         *
          * @see https://docs.openzeppelin.com/contracts/5.x/governance#timestamp_based_governance
          * @see https://docs.soliditylang.org/en/latest/units-and-global-variables.html#block-and-transaction-properties
          */
@@ -50,7 +49,7 @@ contract TokenizedBallot {
             targetBlockNumber < block.number,
             "Rerverted b/c supplied block number not in the past."
         );
-        targetBlockNumber = _targetBlockNumber;//(block.number - 1); //this means I deploy and distribute tokens before deploying ballot
+        targetBlockNumber = _targetBlockNumber; //(block.number - 1); //this means I deploy and distribute tokens before deploying ballot
 
         for (uint i = 0; i < _proposalNames.length; i++) {
             proposals.push(Proposal({name: _proposalNames[i], voteCount: 0}));
@@ -58,7 +57,6 @@ contract TokenizedBallot {
     }
 
     function vote(uint256 proposal, uint256 _amountTokensToVote) external {
-    
         uint256 votePower = getVotePower(msg.sender);
         require(
             votePower >= _amountTokensToVote,
@@ -67,7 +65,6 @@ contract TokenizedBallot {
 
         votePowerSpent[msg.sender] += _amountTokensToVote;
         proposals[proposal].voteCount += _amountTokensToVote;
-
     }
 
     /**
@@ -76,7 +73,9 @@ contract TokenizedBallot {
      * Explicit (in function Body): return votingPower_
      * Implicit (in func signature): function votingPower() public view returns (uint256 votingPower_)
      */
-    function getVotePower( address _someVoterAddress ) public view returns (uint256 votingPower) {
+    function getVotePower(
+        address _someVoterAddress
+    ) public view returns (uint256 votingPower) {
         votingPower =
             tokenContract.getPastVotes(_someVoterAddress, targetBlockNumber) -
             votePowerSpent[_someVoterAddress];

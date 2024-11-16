@@ -1,9 +1,19 @@
-
-
-
+- [Overview: Tokenzied Ballots](#overview-tokenzied-ballots)
+  - [Assignment](#assignment)
+  - [Key Learnings](#key-learnings)
+    - [TypeScript Rules \& Cheat Sheet](#typescript-rules--cheat-sheet)
+    - [How to Act as Another Wallet within HRE](#how-to-act-as-another-wallet-within-hre)
+    - [Instantiating Multiple User Wallets on Live EVMs](#instantiating-multiple-user-wallets-on-live-evms)
+    - [Viem Suggest Simulating Write Transactions Before Executing Live](#viem-suggest-simulating-write-transactions-before-executing-live)
+    - [How to Read User Input from Command line Using Node's Built-in readline Modulele](#how-to-read-user-input-from-command-line-using-nodes-built-in-readline-modulele)
+    - [Viem Core Smart Contract Functions](#viem-core-smart-contract-functions)
+    - [Save Data to a JSON File with Nodejs](#save-data-to-a-json-file-with-nodejs)
+    - [Wei 101](#wei-101)
+- [Project Set-up](#project-set-up)
+- [Appendix](#appendix)
 # Overview: Tokenzied Ballots
 
-Okay boy and girls. Our group is very independent. So everyone has opted to do their homework solo.  As such, this repo embodies my interpretation and key learnings from assignment. 
+Okay boys and girls. Our group is very independent. So everyone has opted to do their homework solo.  As such, this repo embodies my interpretation and key learnings from assignment. 
 
 ## Assignment
 
@@ -27,7 +37,7 @@ For this weekend's project, @codesport has:
 
 ## Key Learnings
 
-### 1. TypeScript Rules & Cheat Sheet
+### TypeScript Rules & Cheat Sheet
 
 
 * No Need to Declare Typings When Declaring Constants
@@ -35,7 +45,7 @@ For this weekend's project, @codesport has:
     * let myVariable: number | string | any | [] | {} | = 123;
 * Cheat sheet: https://learnxinyminutes.com/docs/typescript/
 
-### 2. How to Act as Another Wallet within HRE
+### How to Act as Another Wallet within HRE
 
 There are two way to do this.
 
@@ -52,7 +62,7 @@ Then attach the object to the transaction call within the HRE: `voteHash = await
 
 Method 2 is simpler. It only requires specifing the other account as an argument to the write call: `voteHash = await BallotContract.write.vote([ 2, user1VotingPower], { account: user1.account,  } );`.  " During script setup, these HRE wallets were assigned variable with: `const [deployer, user1, user2, user3] = await viem.getWalletClients();`
 
-### 3. Instantiating Multiple User Wallets on Live EVMs
+### Instantiating Multiple User Wallets on Live EVMs
 
 `account` is a Viem keyword used in wallet-client setup up.  So, we set it as a variable so its value may be reassigned at will by setting it as a variable `let account1 = privateKeyToAccount(`0x${process.env.PRIVATE_KEY}`); // initial assignment where 'account' is a Viem keyword`
 
@@ -109,7 +119,7 @@ hash = await secondaryWalletClient.writeContract({
 ```
 
 
-### 4. Viem Suggest Simulating Write Transactions Before Executing Live
+### Viem Suggest Simulating Write Transactions Before Executing Live
 
 
 https://viem.sh/docs/contract/writeContract.html
@@ -151,7 +161,7 @@ Infura:
  `Details: The method eth_sendTransaction does not exist/is not available`
   
 
-### 5. How to Read User Input from Command line Using Node's Built-in `readline` Module
+### How to Read User Input from Command line Using Node's Built-in readline Modulele
 
 ```
 import * as readline from 'readline
@@ -195,7 +205,7 @@ const confirmAction = async (message: string): Promise<boolean> => {
 }
 ```
 
-### 6. Viem Core Smart Contract Functions
+### Viem Core Smart Contract Functions
 
 1. [Read Contract](https://viem.sh/docs/contract/readContract.html): `await publicClient.readContract({...})`
 
@@ -206,7 +216,7 @@ const confirmAction = async (message: string): Promise<boolean> => {
 1. [Write Contract](https://viem.sh/zksync/actions/deployContract): `await walletClient.writeContract({...})`
 
 
-### 7. Save Data to a JSON File with Nodejs
+### Save Data to a JSON File with Nodejs
 
 Create New File (or Overwrite existing) and Save Save Data:
 `fs.writeFileSync(contractAddressStoragePath, JSON.stringify(variables));`
@@ -267,7 +277,7 @@ function appendKeyValue(/*filePath: string,*/ keyValue: any): any | undefined {
 }
 ```
 
-8.  Wei 101
+### Wei 101
 
 Wei is the smallest divisible unit for Ether. 
 
@@ -316,10 +326,26 @@ Cents is the smallest divisible unit for US dollars.
     * [Wallet 2 Self-Delegation](https://sepolia.etherscan.io/tx/0xc3b9ea77a44661f1b16fd3c4c07c26060bcc1be28c25b1e4f15bc4ef2aba1809)
 
 9.  TokenizedBallot.sol deploy tx hash: [0xc3f088750fb1f0ab86fffb7028ca95401f60729442ad2c71c2c3d3bae647d03a](https://sepolia.etherscan.io/tx/0xc3f088750fb1f0ab86fffb7028ca95401f60729442ad2c71c2c3d3bae647d03a)
+<!-- TOC -->
 
-10. Casting Votes
-    * ![Wallet 1: Casting Votes Screenshot](images/06-cast-vote.png)
-    * ![Wallet 2: Casting Votes Screenshot](images/06b-cast-vote.png)
+<!-- TOC -->
+<!-- TOC -->
+
+- [Overview: Tokenzied Ballots](#overview-tokenzied-ballots)
+  - [Assignment](#assignment)
+  - [Key Learnings](#key-learnings)
+    - [TypeScript Rules \& Cheat Sheet](#typescript-rules--cheat-sheet)
+    - [How to Act as Another Wallet within HRE](#how-to-act-as-another-wallet-within-hre)
+    - [Instantiating Multiple User Wallets on Live EVMs](#instantiating-multiple-user-wallets-on-live-evms)
+    - [Viem Suggest Simulating Write Transactions Before Executing Live](#viem-suggest-simulating-write-transactions-before-executing-live)
+    - [How to Read User Input from Command line Using Node's Built-in readline Modulele](#how-to-read-user-input-from-command-line-using-nodes-built-in-readline-modulele)
+    - [Viem Core Smart Contract Functions](#viem-core-smart-contract-functions)
+    - [Save Data to a JSON File with Nodejs](#save-data-to-a-json-file-with-nodejs)
+    - [Wei 101](#wei-101)
+- [Project Set-up](#project-set-up)
+- [Appendix](#appendix)
+
+<!-- /TOC -->t 2: Casting Votes Screenshot](images/06b-cast-vote.png)
 
 11. Querying Ballot results
     * ![Querying Ballot Results Screenshot](images/07-query-ballot.png)
