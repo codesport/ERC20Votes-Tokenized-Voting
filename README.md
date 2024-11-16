@@ -13,7 +13,8 @@
     - [Save Data to a JSON File with Nodejs](#save-data-to-a-json-file-with-nodejs)
     - [Wei 101](#wei-101)
 - [Project Set-up](#project-set-up)
-- [Upgrades: TypeScript and nodejs: Append data to a json file from command line](#upgrades-typescript-and-nodejs-append-data-to-a-json-file-from-command-line)
+- [Future Upgrades](#future-upgrades)
+  - [TypeScript and nodejs: Append data to a json file from command line](#typescript-and-nodejs-append-data-to-a-json-file-from-command-line)
 - [Appendix](#appendix)
 
 # Overview: Tokenzied Ballots
@@ -342,7 +343,9 @@ Cents is the smallest divisible unit for US dollars.
     * ![Querying Ballot Results Screenshot](images/07-query-ballot.png)
 
 
-# Upgrades: TypeScript and nodejs: Append data to a json file from command line
+# Future Upgrades
+
+## TypeScript and nodejs: Append data to a json file from command line
 
 Combine initial file write function into the append function s.t. original file is never overwritten if it already exists
 
