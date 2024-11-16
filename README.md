@@ -1,3 +1,6 @@
+# Encode Club EVM Bootcamp Group 2, Assignment 3: Tokenzied Ballots
+
+- [Encode Club EVM Bootcamp Group 2, Assignment 3: Tokenzied Ballots](#encode-club-evm-bootcamp-group-2-assignment-3-tokenzied-ballots)
 - [Overview: Tokenzied Ballots](#overview-tokenzied-ballots)
   - [Assignment](#assignment)
   - [Key Learnings](#key-learnings)
