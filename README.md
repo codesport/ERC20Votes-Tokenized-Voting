@@ -48,8 +48,8 @@ For this weekend's project, @codesport has:
 
 * No Need to Declare Typings When Declaring Constants
 * All variables must be initialized with a value:
-    * let myVariable: number | string | any | [] | {} | = 123;
-      - where: | is TypeScript Synatx for "OR"
+    * `let myVariable: number | string | any | [] | {} | = 123;`
+      - where: `|` is TypeScript syntax for "OR"
 * Cheat sheet 1: https://learnxinyminutes.com/docs/typescript/
 * Cheat sheet 2: https://www.typescriptlang.org/docs/handbook/2/objects.html
 
