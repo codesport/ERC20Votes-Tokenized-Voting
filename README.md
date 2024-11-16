@@ -5,12 +5,14 @@
     - [How to Act as Another Wallet within HRE](#how-to-act-as-another-wallet-within-hre)
     - [Instantiating Multiple User Wallets on Live EVMs](#instantiating-multiple-user-wallets-on-live-evms)
     - [Viem Suggest Simulating Write Transactions Before Executing Live](#viem-suggest-simulating-write-transactions-before-executing-live)
-    - [How to Read User Input from Command line Using Node's Built-in readline Modulele](#how-to-read-user-input-from-command-line-using-nodes-built-in-readline-modulele)
+    - [How to Read User Input from Command line Using Node's Built-in `readline` Module](#how-to-read-user-input-from-command-line-using-nodes-built-in-readline-module)
     - [Viem Core Smart Contract Functions](#viem-core-smart-contract-functions)
     - [Save Data to a JSON File with Nodejs](#save-data-to-a-json-file-with-nodejs)
     - [Wei 101](#wei-101)
 - [Project Set-up](#project-set-up)
+- [Upgrades: TypeScript and nodejs: Append data to a json file from command line](#upgrades-typescript-and-nodejs-append-data-to-a-json-file-from-command-line)
 - [Appendix](#appendix)
+
 # Overview: Tokenzied Ballots
 
 Okay boys and girls. Our group is very independent. So everyone has opted to do their homework solo.  As such, this repo embodies my interpretation and key learnings from assignment. 
@@ -41,9 +43,11 @@ For this weekend's project, @codesport has:
 
 
 * No Need to Declare Typings When Declaring Constants
-* All variables must be initialized with a value
+* All variables must be initialized with a value:
     * let myVariable: number | string | any | [] | {} | = 123;
-* Cheat sheet: https://learnxinyminutes.com/docs/typescript/
+      - where: | is TypeScript Synatx for "OR"
+* Cheat sheet 1: https://learnxinyminutes.com/docs/typescript/
+* Cheat sheet 2: https://www.typescriptlang.org/docs/handbook/2/objects.html
 
 ### How to Act as Another Wallet within HRE
 
@@ -139,7 +143,7 @@ let { request } = await publicClient.simulateContract({  // 'request' is also a 
 // console.log( request);
 
 
-//NB: TS requires that statement is sourrounded with '( )'
+//NB: TS requires that statement is surrounded with '( )'
 (  { request } =  await publicClient.simulateContract({ // reassign the 'request' object
     account: secondaryWallet,
     address: readKeyValue('tokenAddress') as `0x${string}`,
@@ -161,7 +165,7 @@ Infura:
  `Details: The method eth_sendTransaction does not exist/is not available`
   
 
-### How to Read User Input from Command line Using Node's Built-in readline Modulele
+### How to Read User Input from Command line Using Node's Built-in `readline` Module
 
 ```
 import * as readline from 'readline
@@ -230,7 +234,7 @@ Create New File (or Overwrite existing) and Save Save Data:
  * @param key 
  * @returns value
  */
-function readKeyValue(/*filePath: string,*/ key: string): string | undefined { //data-type can also be :any intstad of strinfg
+function readKeyValue(/*filePath: string,*/ key: string): string | undefined { //data-type can also be :any intstad of string
     try {
         /**
         * readFileSync reads the file synchronously. The event loop and execution of the remaining code is blocked 
@@ -326,30 +330,58 @@ Cents is the smallest divisible unit for US dollars.
     * [Wallet 2 Self-Delegation](https://sepolia.etherscan.io/tx/0xc3b9ea77a44661f1b16fd3c4c07c26060bcc1be28c25b1e4f15bc4ef2aba1809)
 
 9.  TokenizedBallot.sol deploy tx hash: [0xc3f088750fb1f0ab86fffb7028ca95401f60729442ad2c71c2c3d3bae647d03a](https://sepolia.etherscan.io/tx/0xc3f088750fb1f0ab86fffb7028ca95401f60729442ad2c71c2c3d3bae647d03a)
-<!-- TOC -->
 
-<!-- TOC -->
-<!-- TOC -->
+10. Casting Votes
+    * ![Wallet 1: Casting Votes Screenshot](images/06-cast-vote.png)
+    * ![Wallet 2: Casting Votes Screenshot](images/06b-cast-vote.png)
 
-- [Overview: Tokenzied Ballots](#overview-tokenzied-ballots)
-  - [Assignment](#assignment)
-  - [Key Learnings](#key-learnings)
-    - [TypeScript Rules \& Cheat Sheet](#typescript-rules--cheat-sheet)
-    - [How to Act as Another Wallet within HRE](#how-to-act-as-another-wallet-within-hre)
-    - [Instantiating Multiple User Wallets on Live EVMs](#instantiating-multiple-user-wallets-on-live-evms)
-    - [Viem Suggest Simulating Write Transactions Before Executing Live](#viem-suggest-simulating-write-transactions-before-executing-live)
-    - [How to Read User Input from Command line Using Node's Built-in readline Modulele](#how-to-read-user-input-from-command-line-using-nodes-built-in-readline-modulele)
-    - [Viem Core Smart Contract Functions](#viem-core-smart-contract-functions)
-    - [Save Data to a JSON File with Nodejs](#save-data-to-a-json-file-with-nodejs)
-    - [Wei 101](#wei-101)
-- [Project Set-up](#project-set-up)
-- [Appendix](#appendix)
-
-<!-- /TOC -->t 2: Casting Votes Screenshot](images/06b-cast-vote.png)
-
-11. Querying Ballot results
+12. Querying Ballot results
     * ![Querying Ballot Results Screenshot](images/07-query-ballot.png)
 
+
+# Upgrades: TypeScript and nodejs: Append data to a json file from command line
+
+Combine initial file write function into the append function s.t. original file is never overwritten if it already exists
+
+This solution was provided by [Google's AI](https://www.google.com/search?q=TypeScript+and+nodejs%3A+Append+data+to+a+json+file+from+command+line)
+
+```
+// append.ts
+import * as fs from 'fs';
+
+const dataToAppend = process.argv[2]; // Get the data to append from command line arguments
+
+if (!dataToAppend) {
+  console.error("Please provide data to append as a command line argument.");
+  process.exit(1);
+}
+
+const filePath = 'data.json'; // Replace with your JSON file path
+
+fs.readFile(filePath, 'utf8', (err, data) => {
+  if (err) {
+    if (err.code === 'ENOENT') {
+      // File does not exist, create it with the new data
+      const jsonData = [JSON.parse(dataToAppend)];
+      fs.writeFileSync(filePath, JSON.stringify(jsonData, null, 2));
+      console.log("File created and data appended.");
+    } else {
+      console.error("Error reading file:", err);
+    }
+  } else {
+    // File exists, parse the JSON and append new data
+    try {
+      const jsonData = JSON.parse(data);
+      jsonData.push(JSON.parse(dataToAppend));
+
+      fs.writeFileSync(filePath, JSON.stringify(jsonData, null, 2));
+      console.log("Data appended to file.");
+    } catch (parseError) {
+      console.error("Error parsing JSON:", parseError);
+    }
+  }
+});
+```
 
 # Appendix
 

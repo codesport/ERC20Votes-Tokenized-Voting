@@ -14,8 +14,8 @@ const ETH_SEPOLIA_RPC_URL = process.env.ETH_SEPOLIA_RPC_URL_2
 
 // Create shared client instance
 const publicClient = createPublicClient({
-  chain: sepolia,
-  transport: http(ETH_SEPOLIA_RPC_URL),
+    chain: sepolia,
+    transport: http(ETH_SEPOLIA_RPC_URL),
 });
 
 // Create primary wallet client (deployer) account
@@ -38,7 +38,7 @@ const secondaryWalletClient = createWalletClient({
 const contractAddressStoragePath = 'scripts/contract-data.json'
 
 /**
- * Continue or Abort script via based on user input
+ * Continue or Abort script based on user input
  *
  * - CLI function to verify user inputs. depends on `import * as readline from "readline";`
  * - call from within another async function
@@ -55,7 +55,7 @@ const contractAddressStoragePath = 'scripts/contract-data.json'
  *
  *  const isConfirmed = await confirmAction('Would you like to continue? ');
  *   if (isConfirmed === false) { 
- *      console.log("Operation cancelled by the user.");
+ *      console.log("Operation cancelled by the user. Exiting gracefully now.");
  *       process.exit(0);
  *   }
  */
@@ -66,7 +66,7 @@ const confirmAction = async (message: string): Promise<boolean> => {
     });
 
     return new Promise((resolve) => {
-        rl.question(`${message} \n  Press any key to continue. Or 'Q' to quit! `, (answer) => {
+        rl.question(`${message} \n  Press any key to continue. Or 'q' to quit! `, (answer) => {
             rl.close();
             //resolve(answer.trim().toLowerCase() === "y");
             resolve(answer.trim().toLowerCase() !== "q");
@@ -103,7 +103,7 @@ const requestUserInput = async (message: string): Promise<string> => {
     });
 
     return new Promise((resolve) => {
-        rl.question( message, (answer) => {
+        rl.question(message, (answer) => {
             rl.close(); //this is not convention. should be in prompt caller
             resolve(answer);
         });
@@ -126,13 +126,13 @@ const selectFromList = async (message: string): Promise<number> => {
 
     return new Promise((resolve) => {
         rl.question(`${message} Press 'Q' to quit! \n\n 1) Developer 1: 0x9E3885eCcDc7E6F61B291B03838313F83799e03A \n 2) Developer 2: 0x650Ac918C9e9C5F58f03C2845b2C11C438Ab5BF7\n`, (answer) => {
-                          
 
-                resolve( Number(answer) );
-                 rl.close(); 
+
+            resolve(Number(answer));
+            rl.close();
             //( isNaN(Number(answer)) || Number(answer) !== 1 || Number(answer) !== 2 ) ? 0: Number(answer)
             //resolve(answer.trim().toLowerCase() === "y");
-           // resolve(answer !== 1 || answer !== 2);
+            // resolve(answer !== 1 || answer !== 2);
         });
     });
 }
@@ -145,13 +145,13 @@ const selectFromList = async (message: string): Promise<number> => {
  * @param key 
  * @returns value
  */
-function readKeyValue(/*filePath: string,*/ key: string): string | undefined { //data-type can also be :any intstad of strinfg
+function readKeyValue(/*filePath: string,*/ key: string): string | undefined { //data-type can also be :any instead of string
     try {
         /**
         * readFileSync reads the file synchronously. The event loop and execution of the remaining code is blocked 
         * until all the data has been read.
         */
-        const jsonData = JSON.parse( fs.readFileSync(contractAddressStoragePath, 'utf-8') );
+        const jsonData = JSON.parse(fs.readFileSync(contractAddressStoragePath, 'utf-8'));
         return jsonData[key];
     } catch (error) {
         console.error('Error reading JSON file:', error);
@@ -190,10 +190,10 @@ function appendKeyValue(/*filePath: string,*/ keyValue: any): any | undefined {
 /**
  * 
  * @param address 
- * @returns 
+ * @returns true if valid address.  exit code 1 if invalid
  */
-function isCryptoAddress ( address: Address) {
-    if ( /^0x[a-fA-F0-9]{40}$/.test(address)  === false ){
+function isCryptoAddress(address: Address) {
+    if (/^0x[a-fA-F0-9]{40}$/.test(address) === false) {
 
         //throw new Error("Invalid EVM address");
         console.log(`\nAborting now. ${address} is not a valid crypto address`)
