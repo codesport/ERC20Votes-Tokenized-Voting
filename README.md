@@ -5,14 +5,14 @@
   - [Assignment](#assignment)
   - [Key Learnings](#key-learnings)
     - [TypeScript Rules \& Cheat Sheet](#typescript-rules--cheat-sheet)
-    - [How to Act as Another Wallet within HRE](#how-to-act-as-another-wallet-within-hre)
+    - [How to Act as Another Wallet within the Hardhat Runtime Environment (HRE)](#how-to-act-as-another-wallet-within-the-hardhat-runtime-environment-hre)
     - [Instantiating Multiple User Wallets on Live EVMs](#instantiating-multiple-user-wallets-on-live-evms)
     - [Viem Suggest Simulating Write Transactions Before Executing Live](#viem-suggest-simulating-write-transactions-before-executing-live)
     - [How to Read User Input from Command line Using Node's Built-in `readline` Module](#how-to-read-user-input-from-command-line-using-nodes-built-in-readline-module)
     - [Viem Core Smart Contract Functions](#viem-core-smart-contract-functions)
     - [Save Data to a JSON File with Nodejs](#save-data-to-a-json-file-with-nodejs)
     - [Wei 101](#wei-101)
-- [Project Set-up](#project-set-up)
+- [Project Set-up, Tx Hashes, and Screenshots](#project-set-up-tx-hashes-and-screenshots)
 - [Future Upgrades](#future-upgrades)
   - [TypeScript and nodejs: Append data to a json file from command line](#typescript-and-nodejs-append-data-to-a-json-file-from-command-line)
 - [Appendix](#appendix)
@@ -25,7 +25,7 @@ Okay boys and girls. Our group is very independent. So everyone has opted to do 
 
 For this weekend's project, [@codesport](https//github.com/codesport) has:
 
-1. Customized the original Ballot.sol to a TokenizedBallot.sol.  This new ballot contract uses token ownership at a `block.number`-based snapshot to voting power.
+1. Customized the original Ballot.sol to a `[TokenizedBallot.sol](contracts/TokenizedBallots.sol)`.  This new ballot contract uses token ownership at a `block.number`-based snapshot to gauge voting power
 
 2. Created [nodejs scripts](scripts) which allow users to perform the following:
 
@@ -33,11 +33,11 @@ For this weekend's project, [@codesport](https//github.com/codesport) has:
 * The token's name and symbol were customized as follows: `constructor() ERC20("VoteToken", "VTK") ERC20Permit("VoteToken")`
 
 * Mint (via ERC20's `onlyRole(MINTER_ROLE)`) tokens to others
-* "Delegate" (i.e., transferr) [voting power](https://docs.openzeppelin.com/contracts/5.x/api/governance#Votes-delegate-address-) by transferring tokens to another wallet  
-  * "Delegated" (i.e., transferred) tokens must always be activated by `self-delegating` owned tokens
+* "Delegate" (i.e., transfer) [voting power](https://docs.openzeppelin.com/contracts/5.x/api/governance#Votes-delegate-address-) by sending tokens to another wallet  
+  * "Delegated" (i.e., transferred) tokens must always be "activated" by self-delegating those received tokens
 * Deploy a TokenizeBallot.sol which allows voting, vote tracking, and "connects" to TokenizedVotes.sol via a Solidity Interface
-* Verify vote power 
-   Cast votes
+* Verify vote power and Cast votes
+   
 * Query various voting and proposal results
 
 
@@ -53,11 +53,11 @@ For this weekend's project, [@codesport](https//github.com/codesport) has:
 * Cheat sheet 1: https://learnxinyminutes.com/docs/typescript/
 * Cheat sheet 2: https://www.typescriptlang.org/docs/handbook/2/objects.html
 
-### How to Act as Another Wallet within HRE
+### How to Act as Another Wallet within the Hardhat Runtime Environment (HRE)
 
 There are two way to do this.
 
-Method one has 2 parts. First, instantiate a new wallet client object: 
+Method one has two parts. First, instantiate a new wallet client object: 
 
 ```
     const user1Connector = await viem.getContractAt(
@@ -66,15 +66,15 @@ Method one has 2 parts. First, instantiate a new wallet client object:
         {client: {wallet: user1}}
     );
 ```
-Then attach the object to the transaction call within the HRE: `voteHash = await user1Connector.write.vote([ 1, parseEther("3")  ]);`
+Second, attach the object to the transaction call within the HRE: `voteHash = await user1Connector.write.vote([ 1, parseEther("3")  ]);`
 
-Method 2 is simpler. It only requires specifing the other account as an argument to the write call: `voteHash = await BallotContract.write.vote([ 2, user1VotingPower], { account: user1.account,  } );`.  " During script setup, these HRE wallets were assigned variable with: `const [deployer, user1, user2, user3] = await viem.getWalletClients();`
+Method 2 is simpler. It only requires specifying the other account as an argument to the write call: `voteHash = await BallotContract.write.vote([ 2, user1VotingPower], { account: user1.account,  } );`. NB: During script setup, HRE wallets are assigned via variable destructuring: `const [deployer, user1, user2, user3] = await viem.getWalletClients();`
 
 ### Instantiating Multiple User Wallets on Live EVMs
 
-`account` is a Viem keyword used in wallet-client setup up.  So, we set it as a variable so its value may be reassigned at will by setting it as a variable `let account1 = privateKeyToAccount(`0x${process.env.PRIVATE_KEY}`); // initial assignment where 'account' is a Viem keyword`
+`account` is a Viem keyword used in wallet-client setup up.  So, we may set it as a variable so its value may be reassigned at will by setting it as a variable `let account1 = privateKeyToAccount(`0x${process.env.PRIVATE_KEY}`); // initial assignment where 'account' is a Viem keyword`
 
-However, a better is to use `key:value` notation in the wallet object creationL
+However, a better is to use `key:value` notation in the wallet object creation:
 
 Config file excerpt:
 ```
@@ -157,25 +157,24 @@ let { request } = await publicClient.simulateContract({  // 'request' is also a 
 }) )
 ```
 
-The  Viem docs suggest using `const hash = await walletClient.writeContract(request)` after the simulation is successful. However, this produced an RPC error within the Alchemy RPC.  The error mentioned something about not having access to the account's private key.
+The  Viem docs suggest using `const hash = await walletClient.writeContract(request)` after the simulation is successful. However, this produced an RPC error within the Alchemy and Infura RPC APIs.  The error mentioned something about not having access to the account's private key.
 
 
-Alchemy
+1. **Alchemy**
 ```
  Details: {"code":-32600,"message":"Unsupported method: eth_sendTransaction. See available methods at https://docs.alchemy.com/alchemy/documentation/apis"}
  ```
 
-Infura:
- `Details: The method eth_sendTransaction does not exist/is not available`
+2. **Infura:**  `Details: The method eth_sendTransaction does not exist/is not available`
   
 
 ### How to Read User Input from Command line Using Node's Built-in `readline` Module
 
 ```
-import * as readline from 'readline
+import * as readline from 'readline'
 
 /**
- * Continue or Abort script via based on user input
+ * Continue or abort script via based on user input
  *
  * - CLI function to verify user inputs. depends on `import * as readline from "readline";`
  * - call from within another async function
@@ -299,10 +298,10 @@ Cents is the smallest divisible unit for US dollars.
    *  0.05 ETH = 5 * 10 ** 16
 
 
-# Project Set-up
+# Project Set-up, Tx Hashes, and Screenshots
 
 
-1. Create and run prelim scripts inside the Hardhat Runtime Environment. These are not unit tests, but rather dry-runs within the HRE: 
+1. Create and run prelim scripts inside the HRE. These are not unit tests, but rather dry-runs within the HRE: 
     ```
     pnpm hardhat run test/TokenizedBallot.ts
     ```
@@ -339,7 +338,7 @@ Cents is the smallest divisible unit for US dollars.
     * ![Wallet 1: Casting Votes Screenshot](images/06-cast-vote.png)
     * ![Wallet 2: Casting Votes Screenshot](images/06b-cast-vote.png)
 
-12. Querying Ballot results
+11. Querying Ballot results
     * ![Querying Ballot Results Screenshot](images/07-query-ballot.png)
 
 
@@ -391,7 +390,7 @@ fs.readFile(filePath, 'utf8', (err, data) => {
 
 # Appendix
 
-Online guides to review or delete when I have time:
+1. Online guides to review or delete when I have time:
 
 * https://medium.com/coinmonks/learn-to-deploy-smart-contracts-more-professionally-with-hardhat-1fec1dab8eac#42e2
 * https://stackoverflow.com/questions/75004417/why-do-we-need-deployments-fixture
