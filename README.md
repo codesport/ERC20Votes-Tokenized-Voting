@@ -19,26 +19,26 @@
 
 # Overview: Tokenzied Ballots
 
-Okay boys and girls. Our group is very independent. So everyone has opted to do their homework solo.  As such, this repo embodies my interpretation and key learnings from assignment. 
+Okay boys and girls. Our group is very independent. So everyone has opted to do their homework solo.  As such, this repo embodies my interpretation of as well as my key learnings from the assignment. 
 
 ## Assignment
 
-For this weekend's project, @codesport has:
+For this weekend's project, [@codesport](https//github.com/codesport) has:
 
 1. Customized the original Ballot.sol to a TokenizedBallot.sol.  This new ballot contract uses token ownership at a `block.number`-based snapshot to voting power.
 
-2. Created [nodejs scripts](scripts) which allow endusers to perform the following:
+2. Created [nodejs scripts](scripts) which allow users to perform the following:
 
-* Deploy an [ERC20Votes.sol](contracts/TokenizedVotes.sol) contract from OpenZeppellin's [contract's wizard](https://wizard.openzeppelin.com/)
-* The token's name and symbol were custimized as follows: `constructor() ERC20("VoteToken", "VTK") ERC20Permit("VoteToken")`
+* Deploy an [ERC20Votes](contracts/TokenizedVotes.sol) contract from OpenZeppellin's [contract's wizard](https://wizard.openzeppelin.com/)
+* The token's name and symbol were customized as follows: `constructor() ERC20("VoteToken", "VTK") ERC20Permit("VoteToken")`
 
-* Mint tokens to others
-* Delegates [voting power](https://docs.openzeppelin.com/contracts/5.x/api/governance#Votes-delegate-address-). Voting power may be given by transferring tokens.  
-  * But, must always be activated by `self-delegating` owned tokens
-* Deploys a TokenizeBallot.sol which allows voting, vote tracking, and "connects to ERCVites.sol via a Solidity Interface
-* Cast votes
-* Check vote power 
-* Querying various voting and proposal results
+* Mint (via ERC20's `onlyRole(MINTER_ROLE)`) tokens to others
+* "Delegate" (i.e., transferr) [voting power](https://docs.openzeppelin.com/contracts/5.x/api/governance#Votes-delegate-address-) by transferring tokens to another wallet  
+  * "Delegated" (i.e., transferred) tokens must always be activated by `self-delegating` owned tokens
+* Deploy a TokenizeBallot.sol which allows voting, vote tracking, and "connects" to TokenizedVotes.sol via a Solidity Interface
+* Verify vote power 
+   Cast votes
+* Query various voting and proposal results
 
 
 ## Key Learnings
