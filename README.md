@@ -23,7 +23,7 @@ Okay boys and girls. Our group is very independent. So everyone has opted to do 
 
 ## Assignment
 
-For this weekend's project, [@codesport](https//github.com/codesport) has:
+Following the guidance provided in the [Class 12 repo 🔒](https://github.com/Encode-Club-Solidity-Bootcamp/Lesson-12) and [Professor Matheus' Class 12 Video](https://youtu.be/tFT7lWzVrR0?si=Rxr6oMekg9yD5GA7&t=4863), [@codesport](https//github.com/codesport) has:
 
 1. Customized the original Ballot.sol to a `[TokenizedBallot.sol](contracts/TokenizedBallots.sol)`.  This new ballot contract uses token ownership at a `block.number`-based snapshot to gauge voting power
 
@@ -391,7 +391,7 @@ fs.readFile(filePath, 'utf8', (err, data) => {
 # Appendix
 
 1. Online guides to review or delete when I have time:
-
+* [When to Use Promise.all](https://www.google.com/search?q=when+to+use+promise.all&sourceid=opera&ie=UTF-8&oe=UTF-8)
 * https://medium.com/coinmonks/learn-to-deploy-smart-contracts-more-professionally-with-hardhat-1fec1dab8eac#42e2
 * https://stackoverflow.com/questions/75004417/why-do-we-need-deployments-fixture
 * https://hardhat.org/hardhat-runner/docs/guides/test-contracts
