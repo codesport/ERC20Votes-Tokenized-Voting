@@ -390,8 +390,10 @@ fs.readFile(filePath, 'utf8', (err, data) => {
 
 # Appendix
 
-1. Online guides to review or delete when I have time:
+1. Online guides to review (or delete) when I have time:
 * [When to Use Promise.all](https://www.google.com/search?q=when+to+use+promise.all&sourceid=opera&ie=UTF-8&oe=UTF-8)
+* [Class Notes on Solidity Events](https://github.com/Encode-Club-Solidity-Bootcamp/Lesson-09#events-with-solidity)
+  * [Class 9 Video on Solidity Events](https://youtu.be/v4qM45Gv_ac)
 * https://medium.com/coinmonks/learn-to-deploy-smart-contracts-more-professionally-with-hardhat-1fec1dab8eac#42e2
 * https://stackoverflow.com/questions/75004417/why-do-we-need-deployments-fixture
 * https://hardhat.org/hardhat-runner/docs/guides/test-contracts
