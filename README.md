@@ -4,6 +4,10 @@
 - [Overview: Tokenzied Ballots](#overview-tokenzied-ballots)
   - [Assignment](#assignment)
   - [Key Learnings](#key-learnings)
+    - [Interfaces](#interfaces)
+      - [1. Define your interface via the  `interface` keyword before your `Contract` class definition](#1-define-your-interface-via-the--interface-keyword-before-your-contract-class-definition)
+      - [2. (Optional: Complex Method) Use a variable to define (InterfaceName(contractAddress)) the external interface](#2-optional-complex-method-use-a-variable-to-define-interfacenamecontractaddress-the-external-interface)
+      - [3. Use the interfaced contract's functions within your current contract](#3-use-the-interfaced-contracts-functions-within-your-current-contract)
     - [TypeScript Rules \& Cheat Sheet](#typescript-rules--cheat-sheet)
     - [How to Act as Another Wallet within the Hardhat Runtime Environment (HRE)](#how-to-act-as-another-wallet-within-the-hardhat-runtime-environment-hre)
     - [Instantiating Multiple User Wallets on Live EVMs](#instantiating-multiple-user-wallets-on-live-evms)
@@ -42,6 +46,50 @@ Following the guidance provided in the [Class 12 repo 🔒](https://github.com/E
 
 
 ## Key Learnings
+
+### Interfaces
+
+To use Solidity Interfaces, we need the address of the deployed (target) along with the function signatures we want to utilize. 
+
+
+#### 1. Define your interface via the  `interface` keyword before your `Contract` class definition
+```
+interface VotingToken {
+    function getPastVotes(address, uint256) external view returns (uint256);
+}
+
+ELI5:
+interface ArbitraryInterfaceName {
+    //function signature = name, visibility, type, and return spec
+    function signature1(address, uint256) external view returns (uint256);
+}
+```
+
+#### 2. (Optional: Complex Method) Use a variable to define (InterfaceName(contractAddress)) the external interface
+```
+VotingToken public tokenContract;
+tokenContract = VotingToken(_tokenContractAddress);
+
+ELI5: 
+ArbitraryInterfaceName visibility variableName; //Global, State Variable is defined
+variableName = ArbitraryInterfaceName(InterfaceContractAddress) //Global, State Variable is assigned a value
+```
+
+#### 3. Use the interfaced contract's functions within your current contract
+
+```
+tokenContract.getPastVotes(_someVoterAddress, targetBlockNumber) // (Optional: Complex Method) variable defines (InterfaceName(contractAddress)) the external interface
+
+ELI5:
+variableNam.functionName(parameter1, parameter2) // (Optional: Complex Method)
+
+OR
+VotingToken(_tokenContractAddress).getPastVotes(_someVoterAddress, targetBlockNumber)  // simplified method
+
+ELI5:
+ArbitraryInterfaceName(_tokenContractAddress).functionName(parameter1, parameter2) // simplified method
+
+```
 
 ### TypeScript Rules & Cheat Sheet
 
